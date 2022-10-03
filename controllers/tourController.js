@@ -2,7 +2,6 @@ const Tour = require('../models/tourSchema');
 
 const index = async (req, res) => {
     try {
-
         // copying req query
         const queryObject = {...req.query};
 
@@ -10,8 +9,9 @@ const index = async (req, res) => {
         const excludeFileds = ['sort', 'page', 'limit'];
         excludeFileds.forEach(filed => delete queryObject[filed])
 
+        // database query
         const tours = await Tour.find(queryObject);
-        const total = await Tour.countDocuments();
+        const total = tours.length;
         res.send({ total, message: 'Successfully loaded tours', success: true, tours });
     } catch (error) {
         res.status(500).send({ error: error.message, message: 'Server side error', success: false });
