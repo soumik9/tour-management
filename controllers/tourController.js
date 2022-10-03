@@ -2,7 +2,15 @@ const Tour = require('../models/tourSchema');
 
 const index = async (req, res) => {
     try {
-        const tours = await Tour.find();
+
+        // copying req query
+        const queryObject = {...req.query};
+
+        // excluding fileds
+        const excludeFileds = ['sort', 'page', 'limit'];
+        excludeFileds.forEach(filed => delete queryObject[filed])
+
+        const tours = await Tour.find(queryObject);
         const total = await Tour.countDocuments();
         res.send({ total, message: 'Successfully loaded tours', success: true, tours });
     } catch (error) {
