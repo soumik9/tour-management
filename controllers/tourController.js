@@ -16,6 +16,11 @@ const index = async (req, res) => {
             queries.sortBy = sortBy;
         }
 
+        if(req.query.fields){
+            const fields = req.query.fields.split(',').join(' ');
+            queries.fields = fields;
+        }
+
         if(req.query.page){
             const { page=1, limit=5 } = req.query;
             const skip = (page - 1) * parseInt(limit);
@@ -24,7 +29,7 @@ const index = async (req, res) => {
         }
 
         // database query
-        const tours = await Tour.find(queryObject).skip(queries.skip).limit(queries.limit).sort(queries.sortBy);
+        const tours = await Tour.find(queryObject).skip(queries.skip).limit(queries.limit).sort(queries.sortBy).select(queries.fields);
         const total = tours.length;
         res.send({ total, message: 'Successfully loaded tours', success: true, tours });
     } catch (error) {
