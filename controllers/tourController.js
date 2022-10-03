@@ -4,13 +4,21 @@ const index = async (req, res) => {
     try {
         // copying req query
         const queryObject = {...req.query};
+        const queries = {};
 
         // excluding fileds
         const excludeFileds = ['sort', 'page', 'limit'];
-        excludeFileds.forEach(filed => delete queryObject[filed])
+        excludeFileds.forEach(filed => delete queryObject[filed]);
+
+        if(req.query.page){
+            const { page=1, limit=5 } = req.query;
+            const skip = (page - 1) * parseInt(limit);
+            queries.skip = skip;
+            queries.limit = parseInt(limit);
+        }
 
         // database query
-        const tours = await Tour.find(queryObject);
+        const tours = await Tour.find(queryObject).skip(queries.skip).limit(queries.limit);
         const total = tours.length;
         res.send({ total, message: 'Successfully loaded tours', success: true, tours });
     } catch (error) {
