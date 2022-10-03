@@ -10,17 +10,20 @@ const index = async (req, res) => {
         const excludeFileds = ['sort', 'page', 'limit'];
         excludeFileds.forEach(filed => delete queryObject[filed]);
 
+        // sorting flexiblity
         if(req.query.sort){
             // name, category -----------  'name category'
             const sortBy = req.query.sort.split(',').join(' ');
             queries.sortBy = sortBy;
         }
 
+        // select fields flexiblity
         if(req.query.fields){
             const fields = req.query.fields.split(',').join(' ');
             queries.fields = fields;
         }
 
+        // pagination flexiblity
         if(req.query.page){
             const { page=1, limit=5 } = req.query;
             const skip = (page - 1) * parseInt(limit);
@@ -40,6 +43,7 @@ const index = async (req, res) => {
 const single = async (req, res) => {
     try {
         const { id } = req.params;
+        const updatedData = await Tour.findOneAndUpdate({ _id: id }, { $inc: { viewers: 1} });
         const tour = await Tour.findOne({ _id: id });
 
         res.send({ message: 'Successfully loaded tours', success: true, tour });
