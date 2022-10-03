@@ -10,6 +10,12 @@ const index = async (req, res) => {
         const excludeFileds = ['sort', 'page', 'limit'];
         excludeFileds.forEach(filed => delete queryObject[filed]);
 
+        if(req.query.sort){
+            // name, category -----------  'name category'
+            const sortBy = req.query.sort.split(',').join(' ');
+            queries.sortBy = sortBy;
+        }
+
         if(req.query.page){
             const { page=1, limit=5 } = req.query;
             const skip = (page - 1) * parseInt(limit);
@@ -18,7 +24,7 @@ const index = async (req, res) => {
         }
 
         // database query
-        const tours = await Tour.find(queryObject).skip(queries.skip).limit(queries.limit);
+        const tours = await Tour.find(queryObject).skip(queries.skip).limit(queries.limit).sort(queries.sortBy);
         const total = tours.length;
         res.send({ total, message: 'Successfully loaded tours', success: true, tours });
     } catch (error) {
