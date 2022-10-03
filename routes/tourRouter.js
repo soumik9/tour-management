@@ -6,6 +6,7 @@ const TourController = require('../controllers/tourController');
 
 //get all roles
 router.get('/tours', TourController.index);
+router.post('/tours', TourController.create);
 
 
 

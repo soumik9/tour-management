@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const tourSchema = mongoose.Schema({
-
     name: { 
         type: String, 
         required: [true, 'Name filed is required'] 
@@ -23,7 +22,6 @@ const tourSchema = mongoose.Schema({
         required: [true, 'Price filed is required'],
         min: [0, 'Price can not be negative']
     },
-
 }, { timestamps: true });
 
 const Tour = new mongoose.model("Tour", tourSchema);
