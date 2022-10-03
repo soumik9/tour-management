@@ -9,6 +9,7 @@ router.get('/tours', TourController.index);
 router.post('/tours', TourController.create);
 
 router.get('/tour/cheapest', TourController.cheapest);
+router.get('/tour/trending', TourController.trending);
 router.get('/tours/:id', TourController.single);
 router.patch('/tours/:id', TourController.update);
 

@@ -38,6 +38,15 @@ const cheapest = async (req, res) => {
     }
 }
 
+const trending = async (req, res) => {
+    try {
+        const trendingTours = await Tour.find().sort('-viewers').limit(3);
+        res.send({ message: 'Successfully loaded tours', success: true, trendingTours });
+    } catch (error) {
+        res.status(500).send({ error: error.message, message: 'Server side error', success: false });
+    }
+}
+
 const create = async (req, res) => {
     try {
         const tour = new Tour(req.body);
@@ -68,4 +77,4 @@ const update = async (req, res) => {
       }
 }
 
-module.exports = { index, single, cheapest, create, update }
+module.exports = { index, single, cheapest, trending, create, update }
